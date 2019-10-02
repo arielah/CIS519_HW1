@@ -56,24 +56,14 @@ def train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test):
         j_features=features[j]
         X_subset=X_test[:,j_features]
         output[:,j] = stumps[j].predict(X_subset)
-    model4 = SGDClassifier(loss='log', max_iter=10000).fit(stump_tree,y_train)
+    model4 = SGDClassifier(loss='log', max_iter=50000).fit(stump_tree,y_train)
     y_prime_train = model4.predict(stump_tree)
     part1=getAccuracy(y_prime_train, y_train)
     y_prime_test = model4.predict(output)
     part2=getAccuracy(y_prime_test, y_test)
     return part1, part2
 
-def plot_results(sgd_train_acc, sgd_train_std, sgd_heldout_acc, sgd_heldout_std, sgd_test_acc,
-                 dt_train_acc, dt_train_std, dt_heldout_acc, dt_heldout_std, dt_test_acc,
-                 dt4_train_acc, dt4_train_std, dt4_heldout_acc, dt4_heldout_std, dt4_test_acc,
-                 stumps_train_acc, stumps_train_std, stumps_heldout_acc, stumps_heldout_std, stumps_test_acc):
-    """
-    Plots the final results from problem 2. For each of the 4 classifiers, pass
-    the training accuracy, training standard deviation, held-out accuracy, held-out
-    standard deviation, and testing accuracy.
-
-    Although it should not be necessary, feel free to edit this method.
-    """
+def plot_results(sgd_train_acc, sgd_train_std, sgd_heldout_acc, sgd_heldout_std, sgd_test_acc,dt_train_acc, dt_train_std, dt_heldout_acc, dt_heldout_std, dt_test_acc,dt4_train_acc, dt4_train_std, dt4_heldout_acc, dt4_heldout_std, dt4_test_acc,stumps_train_acc, stumps_train_std, stumps_heldout_acc, stumps_heldout_std, stumps_test_acc):
     train_x_pos = [0, 4, 8, 12]
     cv_x_pos = [1, 5, 9, 13]
     test_x_pos = [2, 6, 10, 14]
@@ -82,6 +72,7 @@ def plot_results(sgd_train_acc, sgd_train_std, sgd_heldout_acc, sgd_heldout_std,
     labels = ['sgd', 'dt', 'dt4', 'stumps (4 x 50)']
 
     train_accs = [sgd_train_acc, dt_train_acc, dt4_train_acc, stumps_train_acc]
+    print(train_accs)
     train_errors = [sgd_train_std, dt_train_std, dt4_train_std, stumps_train_std]
 
     cv_accs = [sgd_heldout_acc, dt_heldout_acc, dt4_heldout_acc, stumps_heldout_acc]
@@ -100,6 +91,7 @@ def plot_results(sgd_train_acc, sgd_train_std, sgd_heldout_acc, sgd_heldout_std,
     ax.yaxis.grid(True)
     ax.legend()
     plt.tight_layout()
+    plt.savefig("graph.png")
 
 
 #Cross-validation
@@ -159,8 +151,9 @@ big_ugh=train_and_evaluate_sgd(X_train, y_train, X_test, y_test)
 big_yuck=train_and_evaluate_decision_tree(X_train, y_train, X_test, y_test)
 big_gross=train_and_evaluate_decision_stump(X_train, y_train, X_test, y_test)
 big_gah=train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test)
+print(big_gah)
 
-my_plot=plot_results(np.mean(model1_train),
+plot_results(np.mean(model1_train),
         np.std(model1_train),
         np.mean(model1_heldout),
         np.std(model1_heldout),
@@ -181,6 +174,5 @@ my_plot=plot_results(np.mean(model1_train),
         np.std(model4_heldout),
         big_gah[1])
 
-my_plot.savefig('graph.png')
 
 
