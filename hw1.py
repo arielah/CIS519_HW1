@@ -3,12 +3,11 @@ import numpy as np
 import pandas as pd
 from string import ascii_lowercase
 
-names=pd.read_csv("badges/test.names.txt",header=None)
 names=[]
 with open("badges/test.names.txt",header=None) as f:
     for line in f:
         line=line.strip()
-        names.append(names)
+        names.append(line)
 
 def compute_features(names):
 	LETTERS = {letter: index for index, letter in enumerate(ascii_lowercase, start=0)} 
