@@ -8,6 +8,8 @@ from cross_validation import train_and_evaluate_decision_tree
 from cross_validation import train_and_evaluate_decision_stump
 from cross_validation import train_and_evaluate_sgd_with_stumps
 
+np.random.seed(329)
+
 train_names=pd.read_csv("badges/train.names.txt",header=None)
 y_train=np.load("badges/train.labels.npy")
 test_names=pd.read_csv("badges/test.names.txt",header=None)
@@ -36,13 +38,15 @@ def compute_features(names):
 	return(features)
 
 X_train=compute_features(train_names)
+print(X_train)
 X_test=compute_features(test_names)
+print(X_test)
 
-big_ugh=train_and_evaluate_sgd(X_train, y_train, X_test, y_test)
-print(big_ugh)
-big_yuck=train_and_evaluate_decision_tree(X_train, y_train, X_test, y_test)
-print(big_yuck)
-big_gross=train_and_evaluate_decision_stump(X_train, y_train, X_test, y_test)
-print(big_gross)
-big_gah=train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test)
-print(big_gah)
+big_sgd=train_and_evaluate_sgd(X_train, y_train, X_test, y_test)
+print(big_sgd)
+big_dt=train_and_evaluate_decision_tree(X_train, y_train, X_test, y_test)
+print(big_dt)
+big_ds=train_and_evaluate_decision_stump(X_train, y_train, X_test, y_test)
+print(big_ds)
+big_ssgd=train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test)
+print(big_ssgd)

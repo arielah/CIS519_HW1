@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 
+np.random.seed(329)
+
 def getAccuracy(first,second):
     same=np.equal(first,second)
     top=np.sum(same)
@@ -72,7 +74,6 @@ def plot_results(sgd_train_acc, sgd_train_std, sgd_heldout_acc, sgd_heldout_std,
     labels = ['sgd', 'dt', 'dt4', 'stumps (4 x 50)']
 
     train_accs = [sgd_train_acc, dt_train_acc, dt4_train_acc, stumps_train_acc]
-    print(train_accs)
     train_errors = [sgd_train_std, dt_train_std, dt4_train_std, stumps_train_std]
 
     cv_accs = [sgd_heldout_acc, dt_heldout_acc, dt4_heldout_acc, stumps_heldout_acc]
@@ -123,23 +124,19 @@ for holdout in range(5):
                 y_train = np.concatenate((y_train,y_part))
             else:
                 y_train = y_part
-    ugh=train_and_evaluate_sgd(x_train, y_train, x_test, y_test)
-    model1_train[holdout]=ugh[0]
-    model1_heldout[holdout]=ugh[1]
-    yuck=train_and_evaluate_decision_tree(x_train, y_train, x_test, y_test)
-    model2_train[holdout]=yuck[0]
-    model2_heldout[holdout]=yuck[1]
-    gross=train_and_evaluate_decision_stump(x_train, y_train, x_test, y_test)
-    model3_train[holdout]=gross[0]
-    model3_heldout[holdout]=gross[1]
-    gah=train_and_evaluate_sgd_with_stumps(x_train, y_train, x_test, y_test)
-    model4_train[holdout]=gah[0]
-    model4_heldout[holdout]=gah[1]
+    sgd=train_and_evaluate_sgd(x_train, y_train, x_test, y_test)
+    model1_train[holdout]=sgd[0]
+    model1_heldout[holdout]=sgd[1]
+    dt=train_and_evaluate_decision_tree(x_train, y_train, x_test, y_test)
+    model2_train[holdout]=dt[0]
+    model2_heldout[holdout]=dt[1]
+    ds=train_and_evaluate_decision_stump(x_train, y_train, x_test, y_test)
+    model3_train[holdout]=ds[0]
+    model3_heldout[holdout]=ds[1]
+    ssgd=train_and_evaluate_sgd_with_stumps(x_train, y_train, x_test, y_test)
+    model4_train[holdout]=ssgd[0]
+    model4_heldout[holdout]=ssgd[1]
 
-    print(ugh)
-    print(yuck)
-    print(gross)
-    print(gah)
 
 #Test
 X_train = np.load('madelon/train-X.npy')
@@ -147,32 +144,37 @@ y_train = np.load('madelon/train-y.npy')
 X_test = np.load('madelon/test-X.npy')
 y_test = np.load('madelon/test-y.npy')
 
-big_ugh=train_and_evaluate_sgd(X_train, y_train, X_test, y_test)
-big_yuck=train_and_evaluate_decision_tree(X_train, y_train, X_test, y_test)
-big_gross=train_and_evaluate_decision_stump(X_train, y_train, X_test, y_test)
-big_gah=train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test)
-print(big_gah)
+big_sgd=train_and_evaluate_sgd(X_train, y_train, X_test, y_test)
+big_dt=train_and_evaluate_decision_tree(X_train, y_train, X_test, y_test)
+big_ds=train_and_evaluate_decision_stump(X_train, y_train, X_test, y_test)
+big_ssgd=train_and_evaluate_sgd_with_stumps(X_train, y_train, X_test, y_test)
+
+print(np.mean(model1_train),np.std(model1_train))
+print(np.mean(model2_train),np.std(model2_train))
+print(np.mean(model3_train),np.std(model3_train))
+print(np.mean(model4_train),np.std(model4_train))
+
 
 plot_results(np.mean(model1_train),
         np.std(model1_train),
         np.mean(model1_heldout),
         np.std(model1_heldout),
-        big_ugh[1],
+        big_sgd[1],
         np.mean(model2_train),
         np.std(model2_train),
         np.mean(model2_heldout),
         np.std(model2_heldout),
-        big_yuck[1],
+        big_dt[1],
         np.mean(model3_train),
         np.std(model3_train),
         np.mean(model3_heldout),
         np.std(model3_heldout),
-        big_gross[1],
+        big_ds[1],
         np.mean(model4_train),
         np.std(model4_train),
         np.mean(model4_heldout),
         np.std(model4_heldout),
-        big_gah[1])
+        big_ssgd[1])
 
 
 
