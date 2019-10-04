@@ -4,13 +4,18 @@ import pandas as pd
 from string import ascii_lowercase
 
 names=pd.read_csv("badges/test.names.txt",header=None)
+names=[]
+with open("badges/test.names.txt",header=None) as f:
+    for line in f:
+        line=line.strip()
+        names.append(names)
 
 def compute_features(names):
 	LETTERS = {letter: index for index, letter in enumerate(ascii_lowercase, start=0)} 
 
-	features=np.zeros((names.shape[0],260))
-	for i in range(names.shape[0]):
-		name=names.ix[i,0]
+	features=np.zeros((len(names),260))
+	for i in range(len(names)):
+		name=names[i]
 		name = name.lower()
 		firstname,lastname=name.split(' ')
 		if len(firstname)>5:
